@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 #!/usr/bin/env python
 
 # Copyright 2016 Google Inc.
@@ -30,8 +31,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 # [END imports]
 
-DEFAULT_GUESTBOOK_NAME = 'default_guestbook'
-
+DEFAULT_GUESTBOOK_NAME = 'default_guestbook3'
 
 # We set a parent key on the 'Greetings' to ensure that they are all
 # in the same entity group. Queries across the single entity group
@@ -94,7 +94,6 @@ class MainPage(webapp2.RequestHandler):
 
 # [START guestbook]
 class Guestbook(webapp2.RequestHandler):
-
     def post(self):
         # We set the same parent key on the 'Greeting' to ensure each
         # Greeting is in the same entity group. Queries across the
@@ -109,10 +108,17 @@ class Guestbook(webapp2.RequestHandler):
             greeting.author = Author(
                     identity=users.get_current_user().user_id(),
                     email=users.get_current_user().email())
+        
 
-        greeting.content = self.request.get('content')
+        line=self.request.get('content')
+        dirty=[u'天安門',u'64',u'天安門',u'台獨',u'法輪功']
+        for key in dirty:
+            line=line.replace(key,'*')
+        #line=line+u'中'
+        #line .append('1')
+
+        greeting.content =line#self.request.get('content')
         greeting.put()
-
         query_params = {'guestbook_name': guestbook_name}
         self.redirect('/?' + urllib.urlencode(query_params))
 # [END guestbook]
